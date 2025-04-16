@@ -17,14 +17,28 @@ public class SoftwareEngineerService {
 
     private final SoftwareEngineerRepository repository;
     private final SoftwareEngineerMapper mapper;
+    private final AiService aiService;
 
 
-    public List<SoftwareEngineer> getAllSoftwareEngineers(){
-        return repository.findAll();
+    public List<SoftwareEngineerResponseDTO> getAllSoftwareEngineers(){
+        return mapper.toResponseDtoList(repository.findAll());
     }
 
     public SoftwareEngineerResponseDTO insertSoftwareEngineer(SoftwareEngineerRequestDTO dto) {
-        SoftwareEngineer saved = repository.save(mapper.toEntity(dto));
+
+        SoftwareEngineer softwareEngineer = mapper.toEntity(dto);
+
+        String prompt = """
+                Based on the programming tech stack %s that %s has given,
+                provide a full learning path and recommendations for this person.
+            """.formatted(softwareEngineer.getTechStack(), softwareEngineer.getName());
+
+        String chatRes = aiService.chat(prompt);
+
+        softwareEngineer.setLearningPathRecommendation(chatRes);
+
+
+        SoftwareEngineer saved = repository.save(softwareEngineer);
 
         return mapper.toResponseDto(saved);
     }
