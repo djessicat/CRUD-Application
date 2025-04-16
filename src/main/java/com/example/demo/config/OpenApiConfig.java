@@ -14,7 +14,7 @@ public class OpenApiConfig {
                     .info(new Info()
                             .title("Software Engineer API")
                             .version("1.0")
-                            .description("CRUD API for managing Software Engineers")
+                            .description("CRUD API for managing Software Engineers with AI integration")
                     );
         }
 
