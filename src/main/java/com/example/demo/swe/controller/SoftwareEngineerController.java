@@ -17,11 +17,14 @@ import java.util.List;
 @RequestMapping("api/v1/software-engineers")
 public class SoftwareEngineerController {
 
+
     private final SoftwareEngineerService softwareEngineerService;
 
     @GetMapping
-    public List<SoftwareEngineer> getSoftwareEngineers() {
-        return softwareEngineerService.getAllSoftwareEngineers();
+    public ResponseEntity<List<SoftwareEngineerResponseDTO>> getSoftwareEngineers() {
+        List<SoftwareEngineerResponseDTO> response = softwareEngineerService.getAllSoftwareEngineers();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("{id}")
